@@ -1,5 +1,4 @@
 import pygame
-import os
 
 pygame.init()
 
@@ -10,10 +9,12 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Cat Adventure")
 x = 200
 y = 200
+scale = 0.3
 
 img = pygame.image.load('img/cat/idle/mario.png')
+img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
 rect = img.get_rect()
-rect.centre = (x, y)
+rect.center = (x, y)
 
 
 running = True
