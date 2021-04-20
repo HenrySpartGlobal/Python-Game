@@ -31,7 +31,7 @@ class Cat(pygame.sprite.Sprite):
         self.speed = speed
         self.direction = 1
         self.flip = False
-        img = pygame.image.load(f'img/{self.char_type}/idle/mario.png')
+        img = pygame.image.load(f'img/{self.char_type}/idle/0.png')
         self.image = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
@@ -59,8 +59,8 @@ class Cat(pygame.sprite.Sprite):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
 
-player = Cat('cat', 200, 200, 0.1, 5)
-enemy = Cat('cat', 300, 200, 0.1, 5)
+player = Cat('cat', 200, 200, 2, 5)
+enemy = Cat('cat', 300, 200, 2, 5)
 running = True
 
 while running:
