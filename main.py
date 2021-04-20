@@ -31,8 +31,14 @@ class Cat(pygame.sprite.Sprite):
         self.speed = speed
         self.direction = 1
         self.flip = False
-        img = pygame.image.load(f'img/{self.char_type}/idle/0.png')
-        self.image = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
+        self.animation_list = []
+        self.frame_index = 0
+        self.update_time = pygame.time.get_ticks()
+        for i in range(18):
+            img = pygame.image.load(f'img/{self.char_type}/idle/{i}.png')
+            img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
+            self.animation_list.append(img)
+        self.image = self.animation_list[self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
@@ -55,12 +61,27 @@ class Cat(pygame.sprite.Sprite):
         self.rect.x += dx
         self.rect.y += dy
 
+    def update_anim(self):
+        # update time
+        ANIMATION_COOLDOWN = 100
+        # update image depending on frame
+        self.image = self.animation_list[self.frame_index]
+        # check when last update was
+        if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
+            self.update_time = pygame.time.get_ticks()
+            self.frame_index += 1
+        # loop animation back to start
+            if self.frame_index >= len(self.animation_list):
+                self.frame_index = 0
+
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
 
-player = Cat('cat', 200, 200, 2, 5)
-enemy = Cat('cat', 300, 200, 2, 5)
+player = Cat('rell', 200, 200, 2, 5)
+
+# todo change animation loop for cat
+enemy = Cat('rell', 300, 200, 2, 5)
 running = True
 new_time, old_time = None, None
 
@@ -69,6 +90,7 @@ while running:
     clock.tick(fps)
     draw_bg()
 
+    player.update_anim()
     player.draw()
     enemy.draw()
 
@@ -99,7 +121,7 @@ while running:
         old_time = new_time
     new_time = pygame.time.get_ticks()
     if new_time and old_time:
-        pygame.display.set_caption("FPS " + (str(int(clock.get_fps())) + " ms: " + str(new_time-old_time)))
+        pygame.display.set_caption("FPS " + (str(int(clock.get_fps())) + " ms: " + str(new_time - old_time)))
 
         pygame.display.update()
 
