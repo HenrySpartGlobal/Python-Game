@@ -62,6 +62,7 @@ class Cat(pygame.sprite.Sprite):
 player = Cat('cat', 200, 200, 2, 5)
 enemy = Cat('cat', 300, 200, 2, 5)
 running = True
+new_time, old_time = None, None
 
 while running:
 
@@ -92,6 +93,13 @@ while running:
                 moving_left = False
             if event.key == pygame.K_d:
                 moving_right = False
+
+    # display fps and milliseconds
+    if new_time:
+        old_time = new_time
+    new_time = pygame.time.get_ticks()
+    if new_time and old_time:
+        pygame.display.set_caption("FPS " + (str(int(clock.get_fps())) + " ms: " + str(new_time-old_time)))
 
         pygame.display.update()
 
