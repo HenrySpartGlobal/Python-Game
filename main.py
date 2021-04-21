@@ -3,15 +3,15 @@ import os
 
 pygame.init()
 
-SCREEN_WIDTH = 800
+SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = int(SCREEN_WIDTH * 0.8)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Rells Adventure')
 
-# set framerate
+# set frame rate
 clock = pygame.time.Clock()
-FPS = 60
+FPS = 144
 
 # define game variables
 GRAVITY = 0.75
@@ -47,7 +47,7 @@ class Rell(pygame.sprite.Sprite):
         self.action = 0
         self.update_time = pygame.time.get_ticks()
 
-        # load all images for the players
+        # load all images for the players (folders)
         animation_types = ['Idle', 'Run', 'Jump', 'Attack']
         for animation in animation_types:
             # reset temporary list of images
@@ -65,11 +65,11 @@ class Rell(pygame.sprite.Sprite):
         self.rect.center = (x, y)
 
     def move(self, moving_left, moving_right):
-        # reset movement variables
+        # reset movement vars
         dx = 0
         dy = 0
 
-        # assign movement variables if moving left or right
+        # assign movement vars if moving left or right
         if moving_left:
             dx = -self.speed
             self.flip = True
@@ -85,7 +85,7 @@ class Rell(pygame.sprite.Sprite):
             self.jump = False
             self.in_air = True
 
-        # apply gravity
+        # gravity
         self.vel_y += GRAVITY
         if self.vel_y > 10:
             self.vel_y
@@ -103,18 +103,21 @@ class Rell(pygame.sprite.Sprite):
     def update_animation(self):
         # update animation
         ANIMATION_COOLDOWN = 100
+
         # update image depending on current frame
         self.image = self.animation_list[self.action][self.frame_index]
+
         # check if enough time has passed since the last update
         if pygame.time.get_ticks() - self.update_time > ANIMATION_COOLDOWN:
             self.update_time = pygame.time.get_ticks()
             self.frame_index += 1
-        # if the animation has run out the reset back to the start
+
+        # if the animation has finished then reset back to the start
         if self.frame_index >= len(self.animation_list[self.action]):
             self.frame_index = 0
 
     def update_action(self, new_action):
-        # check if the new action is different to the previous one
+        # check if the new action is unique
         if new_action != self.action:
             self.action = new_action
             # update the animation settings
@@ -128,10 +131,9 @@ class Rell(pygame.sprite.Sprite):
 player = Rell('Rell', 200, 200, 3, 5)
 enemy = Rell('enemy', 400, 200, 3, 5)
 cat = Rell('cat', 220, 250, 3, 5)
-LEFT = 1
 
-run = True
-while run:
+running = True
+while running:
 
     clock.tick(FPS)
 
@@ -157,7 +159,7 @@ while run:
     for event in pygame.event.get():
         # quit game
         if event.type == pygame.QUIT:
-            run = False
+            running = False
 
         # mouse presses
         if event.type == pygame.MOUSEBUTTONDOWN and player.alive:
@@ -178,7 +180,7 @@ while run:
             if event.key == pygame.K_w and player.alive:
                 player.jump = True
             if event.key == pygame.K_ESCAPE:
-                run = False
+                running = False
 
         # keyboard button released
         if event.type == pygame.KEYUP:
