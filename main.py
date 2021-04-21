@@ -47,7 +47,7 @@ class Rell(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
 
         # load all images for the players
-        animation_types = ['Idle', 'Run', 'Jump']
+        animation_types = ['Idle', 'Run', 'Jump', 'Attack']
         for animation in animation_types:
             # reset temporary list of images
             temp_list = []
@@ -126,7 +126,7 @@ class Rell(pygame.sprite.Sprite):
 
 player = Rell('Rell', 200, 200, 3, 5)
 enemy = Rell('enemy', 400, 200, 3, 5)
-cat = Rell('cat', 400, 200, 3, 5)
+cat = Rell('cat', 220, 250, 3, 5)
 
 run = True
 while run:
