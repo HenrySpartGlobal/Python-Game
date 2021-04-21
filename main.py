@@ -38,6 +38,7 @@ class Rell(pygame.sprite.Sprite):
         self.speed = speed
         self.direction = 1
         self.vel_y = 0
+        self.attack = False
         self.jump = False
         self.in_air = True
         self.flip = False
@@ -142,7 +143,9 @@ while run:
 
     # update Rell actions
     if player.alive:
-        if player.in_air:
+        if player.attack:
+            player.update_action(3)  # 3: attack
+        elif player.in_air:
             player.update_action(2)  # 2: jump
         elif moving_left or moving_right:
             player.update_action(1)  # 1: run
@@ -162,6 +165,8 @@ while run:
                 moving_right = True
             if event.key == pygame.K_w and player.alive:
                 player.jump = True
+            if event.key == pygame.K_s and player.alive:
+                player.attack = True
             if event.key == pygame.K_ESCAPE:
                 run = False
 
@@ -171,6 +176,8 @@ while run:
                 moving_left = False
             if event.key == pygame.K_d:
                 moving_right = False
+            if event.key == pygame.K_s:
+                player.attack = False
 
     pygame.display.update()
 
