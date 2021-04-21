@@ -128,6 +128,7 @@ class Rell(pygame.sprite.Sprite):
 player = Rell('Rell', 200, 200, 3, 5)
 enemy = Rell('enemy', 400, 200, 3, 5)
 cat = Rell('cat', 220, 250, 3, 5)
+LEFT = 1
 
 run = True
 while run:
@@ -157,6 +158,17 @@ while run:
         # quit game
         if event.type == pygame.QUIT:
             run = False
+
+        # mouse presses
+        if event.type == pygame.MOUSEBUTTONDOWN and player.alive:
+            if event.button == 1:
+                player.attack = True
+
+        # mouse released
+        if event.type == pygame.MOUSEBUTTONUP and player.alive:
+            if event.button == 1:
+                player.attack = False
+
         # keyboard presses
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
@@ -165,8 +177,6 @@ while run:
                 moving_right = True
             if event.key == pygame.K_w and player.alive:
                 player.jump = True
-            if event.key == pygame.K_s and player.alive:
-                player.attack = True
             if event.key == pygame.K_ESCAPE:
                 run = False
 
@@ -176,8 +186,6 @@ while run:
                 moving_left = False
             if event.key == pygame.K_d:
                 moving_right = False
-            if event.key == pygame.K_s:
-                player.attack = False
 
     pygame.display.update()
 
