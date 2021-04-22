@@ -14,7 +14,7 @@ clock = pygame.time.Clock()
 FPS = 144
 
 # define game variables
-GRAVITY = 0.75
+GRAVITY = 0.4
 
 # define Rell action variables
 moving_left = False
@@ -135,8 +135,8 @@ class Rell(pygame.sprite.Sprite):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
 
-player = Rell('Rell', 200, 200, 3, 5)
-enemy = Rell('enemy', 400, 200, 3, 5)
+player = Rell('Rell', 200, 245, 3, 5)
+enemy = Rell('enemy', 400, 245, 3, 5)
 cat = Rell('cat', 220, 250, 3, 5)
 
 running = True
@@ -192,7 +192,7 @@ while running:
                 moving_left = True
             if event.key == pygame.K_d:
                 moving_right = True
-            if event.key == pygame.K_w and player.alive:
+            if event.key == pygame.K_SPACE and player.alive:
                 player.jump = True
             if event.key == pygame.K_ESCAPE:
                 running = False
