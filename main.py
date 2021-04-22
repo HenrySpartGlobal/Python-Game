@@ -80,6 +80,12 @@ class Rell(pygame.sprite.Sprite):
             self.flip = False
             self.direction = 1
 
+        # stop the player moving whilst attacking
+        if player.attack:
+            dx = self.speed % 4.5
+        if player.melee:
+            dx = self.speed % 4.5
+
         # jump
         if self.jump == True and self.in_air == False:
             self.vel_y = -11
