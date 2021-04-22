@@ -39,6 +39,7 @@ class Rell(pygame.sprite.Sprite):
         self.direction = 1
         self.vel_y = 0
         self.attack = False
+        self.melee = False
         self.jump = False
         self.in_air = True
         self.flip = False
@@ -48,7 +49,7 @@ class Rell(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
 
         # load all images for the players (folders)
-        animation_types = ['Idle', 'Run', 'Jump', 'Attack']
+        animation_types = ['Idle', 'Run', 'Jump', 'Attack', 'Melee']
         for animation in animation_types:
             # reset temporary list of images
             temp_list = []
@@ -146,7 +147,9 @@ while running:
 
     # update Rell actions
     if player.alive:
-        if player.attack:
+        if player.melee:
+            player.update_action(4)  # 4: melee
+        elif player.attack:
             player.update_action(3)  # 3: attack
         elif player.in_air:
             player.update_action(2)  # 2: jump
@@ -165,11 +168,17 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN and player.alive:
             if event.button == 1:
                 player.attack = True
+        if event.type == pygame.MOUSEBUTTONDOWN and player.alive:
+            if event.button == 3:
+                player.melee = True
 
         # mouse released
         if event.type == pygame.MOUSEBUTTONUP and player.alive:
             if event.button == 1:
                 player.attack = False
+        if event.type == pygame.MOUSEBUTTONUP and player.alive:
+            if event.button == 3:
+                player.melee = False
 
         # keyboard presses
         if event.type == pygame.KEYDOWN:
