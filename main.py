@@ -1,5 +1,6 @@
 import pygame
 import os
+from PIL import Image
 
 pygame.init()
 
@@ -19,6 +20,10 @@ GRAVITY = 0.4
 # define Rell action variables
 moving_left = False
 moving_right = False
+shoot = False
+
+# load assets
+arrow_img = pygame.transform.scale(pygame.image.load('img/assets/arrow_1.png'), (40, 40)).convert_alpha()
 
 # define colours
 BG = (144, 201, 120)
@@ -56,7 +61,7 @@ class Rell(pygame.sprite.Sprite):
             # count number of files in the folder
             num_of_frames = len(os.listdir(f'img/{self.char_type}/{animation}'))
             for i in range(num_of_frames):
-                img = pygame.image.load(f'img/{self.char_type}/{animation}/{i}.png')
+                img = pygame.image.load(f'img/{self.char_type}/{animation}/{i}.png').convert_alpha()
                 img = pygame.transform.scale(img, (int(img.get_width() * scale), int(img.get_height() * scale)))
                 temp_list.append(img)
             self.animation_list.append(temp_list)
@@ -135,6 +140,19 @@ class Rell(pygame.sprite.Sprite):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
 
+class Arrow(pygame.sprite.Sprite):
+    def __init__(self, x, y, direction):
+        pygame.sprite.Sprite.__init__(self)
+        self.speed = 10
+        self.image = arrow_img
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+        self.direction = direction
+
+
+# sprite groups
+arrow_group = pygame.sprite.Group()
+
 player = Rell('Rell', 200, 245, 3, 5)
 enemy = Rell('enemy', 400, 245, 3, 5)
 cat = Rell('cat', 220, 250, 3, 5)
@@ -151,12 +169,18 @@ while running:
     cat.draw()
     enemy.draw()
 
+    # update and draw groups
+    arrow_group.update()
+    arrow_group.draw(screen)
+
     # update Rell actions
     if player.alive:
         if player.melee:
             player.update_action(4)  # 4: melee
         elif player.attack:
             player.update_action(3)  # 3: attack
+            arrow = Arrow(player.rect.centerx, player.rect.centery, player.direction)
+            arrow_group.add(arrow)
         elif player.in_air:
             player.update_action(2)  # 2: jump
         elif moving_left or moving_right:
@@ -174,6 +198,8 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN and player.alive:
             if event.button == 1:
                 player.attack = True
+                shoot = True
+
         if event.type == pygame.MOUSEBUTTONDOWN and player.alive:
             if event.button == 3:
                 player.melee = True
@@ -182,6 +208,8 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP and player.alive:
             if event.button == 1:
                 player.attack = False
+                shoot = False
+
         if event.type == pygame.MOUSEBUTTONUP and player.alive:
             if event.button == 3:
                 player.melee = False
